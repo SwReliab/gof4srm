@@ -97,6 +97,50 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_Pdminus_arma
+List compute_Pdminus_arma(NumericVector ctime, IntegerVector count, double dminus, Function cdf, Function solve);
+RcppExport SEXP _gof4srm_compute_Pdminus_arma(SEXP ctimeSEXP, SEXP countSEXP, SEXP dminusSEXP, SEXP cdfSEXP, SEXP solveSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type ctime(ctimeSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type count(countSEXP);
+    Rcpp::traits::input_parameter< double >::type dminus(dminusSEXP);
+    Rcpp::traits::input_parameter< Function >::type cdf(cdfSEXP);
+    Rcpp::traits::input_parameter< Function >::type solve(solveSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_Pdminus_arma(ctime, count, dminus, cdf, solve));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_Pdplus_arma
+List compute_Pdplus_arma(NumericVector ctime, IntegerVector count, double dplus, Function cdf, Function solve);
+RcppExport SEXP _gof4srm_compute_Pdplus_arma(SEXP ctimeSEXP, SEXP countSEXP, SEXP dplusSEXP, SEXP cdfSEXP, SEXP solveSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type ctime(ctimeSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type count(countSEXP);
+    Rcpp::traits::input_parameter< double >::type dplus(dplusSEXP);
+    Rcpp::traits::input_parameter< Function >::type cdf(cdfSEXP);
+    Rcpp::traits::input_parameter< Function >::type solve(solveSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_Pdplus_arma(ctime, count, dplus, cdf, solve));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ks_pvalue
+double ks_pvalue(double d, int n, int imax, double epsi);
+RcppExport SEXP _gof4srm_ks_pvalue(SEXP dSEXP, SEXP nSEXP, SEXP imaxSEXP, SEXP epsiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type imax(imaxSEXP);
+    Rcpp::traits::input_parameter< double >::type epsi(epsiSEXP);
+    rcpp_result_gen = Rcpp::wrap(ks_pvalue(d, n, imax, epsi));
+    return rcpp_result_gen;
+END_RCPP
+}
 // multinomialLHC
 NumericMatrix multinomialLHC(int n, int size, NumericVector ctime, Function cdf, NumericMatrix lhc);
 RcppExport SEXP _gof4srm_multinomialLHC(SEXP nSEXP, SEXP sizeSEXP, SEXP ctimeSEXP, SEXP cdfSEXP, SEXP lhcSEXP) {
@@ -121,6 +165,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gof4srm_compute_Pdminus", (DL_FUNC) &_gof4srm_compute_Pdminus, 4},
     {"_gof4srm_compute_Pdplus", (DL_FUNC) &_gof4srm_compute_Pdplus, 4},
     {"_gof4srm_KSdistance_groupM", (DL_FUNC) &_gof4srm_KSdistance_groupM, 4},
+    {"_gof4srm_compute_Pdminus_arma", (DL_FUNC) &_gof4srm_compute_Pdminus_arma, 5},
+    {"_gof4srm_compute_Pdplus_arma", (DL_FUNC) &_gof4srm_compute_Pdplus_arma, 5},
+    {"_gof4srm_ks_pvalue", (DL_FUNC) &_gof4srm_ks_pvalue, 4},
     {"_gof4srm_multinomialLHC", (DL_FUNC) &_gof4srm_multinomialLHC, 5},
     {NULL, NULL, 0}
 };

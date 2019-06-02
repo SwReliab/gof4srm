@@ -104,7 +104,9 @@ KSdistance_groupM <- function(ctime, size, sample, cdf) {
 #' @param dplus A value of d+
 #' @param cdf A function of CDF. It is allowd to get a closure.
 #' @return A value of the probability
-NULL
+compute_Pdminus_arma <- function(ctime, count, dminus, cdf, solve) {
+    .Call('_gof4srm_compute_Pdminus_arma', PACKAGE = 'gof4srm', ctime, count, dminus, cdf, solve)
+}
 
 #' Compute P(D+>d+) for the generalized KS statistic
 #'
@@ -116,13 +118,17 @@ NULL
 #' @param dplus A value of d+
 #' @param cdf A function of CDF. It is allowd to get a closure.
 #' @return A value of the probability
-NULL
+compute_Pdplus_arma <- function(ctime, count, dplus, cdf, solve) {
+    .Call('_gof4srm_compute_Pdplus_arma', PACKAGE = 'gof4srm', ctime, count, dplus, cdf, solve)
+}
 
 #' Compute p-value of KS.
 #'
 #' This is not in use.
 #'
-NULL
+ks_pvalue <- function(d, n, imax = 100000L, epsi = 1.0e-12) {
+    .Call('_gof4srm_ks_pvalue', PACKAGE = 'gof4srm', d, n, imax, epsi)
+}
 
 #' Generate samples drawn from multinomial distirbution.
 #'

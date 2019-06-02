@@ -11,7 +11,7 @@ using namespace Rcpp;
 //' @param dplus A value of d+
 //' @param cdf A function of CDF. It is allowd to get a closure.
 //' @return A value of the probability
-// // [[Rcpp::export]]
+// [[Rcpp::export]]
 
 List compute_Pdminus_arma(NumericVector ctime, IntegerVector count,
                           double dminus, Function cdf, Function solve) {
@@ -65,7 +65,7 @@ List compute_Pdminus_arma(NumericVector ctime, IntegerVector count,
 //' @param dplus A value of d+
 //' @param cdf A function of CDF. It is allowd to get a closure.
 //' @return A value of the probability
-// // [[Rcpp::export]]
+// [[Rcpp::export]]
 
 List compute_Pdplus_arma(NumericVector ctime, IntegerVector count,
                          double dplus, Function cdf, Function solve) {

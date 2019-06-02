@@ -5,7 +5,7 @@ using namespace Rcpp;
 //'
 //' This is not in use.
 //'
-// // [[Rcpp::export]]
+// [[Rcpp::export]]
 
 double ks_pvalue(double d, int n, int imax = 100000, double epsi = 1.0e-12) {
   const double pi = 4.0 * std::atan(1.0);
