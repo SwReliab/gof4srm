@@ -1,78 +1,141 @@
-# testlam <- function(x, ...) {
-#   args <- list(...)
-#   r <- ifelse(is.null(args$rate), 1, args$rate)
-#   return(args$total * dexp(x, rate=r))
-# }
-#
-# testlam2 <- function(x, ...) {
-#   args <- list(...)
-#   l <- ifelse(is.null(args$location), 0, args$location)
-#   s <- ifelse(is.null(args$scale), 0, args$scale)
-#   return(args$total * dlogis(x, location=l, scale=s))
-# }
-
-#' Generate samples drawn from NHPP
-#'
-#' This is a function to generate samples drwan from NHPP by thining.
-#'
-#' @param intensity A function of intensity function
-#' @param range A vector (min, max) indicating the range
-#' @param maximum A value of maximum intensity.
-#' @return A time series of event occurences
-
-thinning <- function(intensity, range, maximum) {
-  n <- rpois(1, maximum*(range[2] - range[1]))
-  candidates <- sort(runif(n, min=range[1], max=range[2]))
-  y <- candidates[intensity(candidates) / maximum > runif(n)]
-  return(sort(y))
-}
-
 #' bootstrap of NHPP
 #'
 #' Generate time data (bootstrap samples) from a given NHPP.
 #'
-#' @param srm An object of an estimated result by Rsrat
-#' @return A time data (time series)
+#' @param srm An object of model provided from Rsrat
+#' @param data An object of faultdata
+#' @param maximum A value of the maximum value of intensity for an interval (0, the last observation time)
+#' @return An object of faultdata of bootstrap sample
 #' @export
 
-bs.nhpp.time <- function(intensity, range, maximum) {
-  x <- thinning(intensity, range, maximum)
-  time <- diff(c(0, x))
-  faultdata(time=time, te=range[2] - sum(time))
+bs.srm.time <- function(srm, data, maximum) {
+  te <- data$max
+  cte <- sum(data$time) + te
+  n <- rpois(1, maximum*cte)
+  candidates <- sort(runif(n, min=0, max=cte))
+  y <- candidates[srm$intensity(candidates) / maximum > runif(n)]
+  time <- diff(c(0, y))
+  faultdata(time=time, te=cte-sum(time))
+}
+
+#' bootstrap of NHPP
+#'
+#' Generate group data (bootstrap samples) from a given NHPP.
+#'
+#' @param srm An object of model provided from Rsrat
+#' @param data An object of faultdata
+#' @return An object of faultdata of bootstrap sample
+#' @export
+
+bs.srm.group <- function(srm, data) {
+  ctime <- c(0, cumsum(srm$data$time))
+  lambda <- diff(srm$mvf(ctime))
+  faultdata(fault=sapply(lambda, function(r) rpois(1, lambda = r)))
+}
+
+#' EIC for SRM
+#'
+#' Generate samples of bias for SRM with group data from bootstrap sampling
+#'
+#' @param obj An object of an estimated result by Rsrat
+#' @param bsample An integer of the number of bootstrap samples
+#' @return A numeric vector of samples of bias
+#' @export
+
+eic.srm.group <- function(obj, bsample = 100) {
+  b3 <- obj$llf
+  b1 <- numeric(bsample)
+  b2 <- numeric(bsample)
+  b4 <- numeric(bsample)
+
+  ctime <- c(0, cumsum(obj$srm$data$time))
+  lambda <- diff(obj$srm$mvf(ctime))
+
+  for (b in 1:bsample) {
+    sample <- faultdata(fault=sapply(lambda, function(r) rpois(1, lambda = r)))
+    b2[b] <- obj$srm$llf(sample)
+    obj.bs <- emfit(obj$srm$clone(), sample, initialize=FALSE)
+    b1[b] <- obj.bs$llf
+    b4[b] <- obj.bs$srm$llf(obj$srm$data)
+  }
+  b1 - b2 + b3 - b4
+}
+
+#' EIC for SRM
+#'
+#' Generate samples of bias for SRM with time data from bootstrap sampling
+#'
+#' @param obj An object of an estimated result by Rsrat
+#' @param bsample An integer of the number of bootstrap samples
+#' @return A numeric vector of samples of bias
+#' @export
+
+eic.srm.time <- function(obj, bsample = 100) {
+  b3 <- obj$llf
+  b1 <- numeric(bsample)
+  b2 <- numeric(bsample)
+  b4 <- numeric(bsample)
+
+  cte <- sum(obj$data$time) + obj$srm$data$max
+  maximum <- stats::optimize(obj$srm$intensity, c(0,cte), maximum=TRUE)$objective
+
+  for (b in 1:bsample) {
+    sample <- bs.srm.time(obj$srm, obj$srm$data, maximum)
+    b2[b] <- obj$srm$llf(sample)
+    obj.bs <- emfit(obj$srm$clone(), sample, initialize=FALSE)
+    b1[b] <- obj.bs$llf
+    b4[b] <- obj.bs$srm$llf(obj$srm$data)
+  }
+  b1 - b2 + b3 - b4
+}
+
+#' EIC for SRM
+#'
+#' Generate samples of EIC
+#'
+#' @param obj An object of an estimated result by Rsrat
+#' @param bsample An integer of the number of bootstrap samples
+#' @return A vector of samples
+#' @export
+
+eic.srm.sample <- function(obj, bsample = 100) {
+  if (check.faultdata(obj$srm$data) == "time") {
+    bias.sample <- eic.srm.time(obj, bsample)
+  } else if (check.faultdata(obj$srm$data) == "group") {
+    bias.sample <- eic.srm.group(obj, bsample)
+  } else {
+    stop("The fault data is neither time nor group data.")
+  }
+  -2 * (obj$llf - bias.sample)
 }
 
 #' EIC for SRM
 #'
 #' Compute EIC for SRM
 #'
-#' @param srm An object of an estimated result by Rsrat
-#' @return resA time data (time series)
+#' @param obj An object of an estimated result by Rsrat
+#' @param bsample An integer of the number of bootstrap samples
+#' @param alpha A value of significant level to obtain confidence interval.
+#' The default is 0.95.
+#' @return lower and upper bounds of bias, eic
 #' @export
 
-eic <- function(result, bsample = 100, alpha = 0.95) {
-  b3 <- result$llf
-  b1 <- numeric(bsample)
-  b2 <- numeric(bsample)
-  b4 <- numeric(bsample)
-
-  range <- c(0, result$srm$data$max)
-  maximum <- optimize(result$srm$intensity, range, maximum=TRUE)$objective
-
-  for (b in 1:bsample) {
-    sample <- bs.nhpp.time(result$srm$intensity, range, maximum)
-    b2[b] <- result$srm$llf(sample)
-    result.bs <- emfit(result$srm$clone(), sample, initialize=FALSE)
-    b1[b] <- result.bs$llf
-    b4[b] <- result.bs$srm$llf(result$srm$data)
+eic.srm <- function(obj, bsample = 100, alpha = 0.95) {
+  if (check.faultdata(obj$srm$data) == "time") {
+    bias.sample <- eic.srm.time(obj, bsample)
+  } else if (check.faultdata(obj$srm$data) == "group") {
+    bias.sample <- eic.srm.group(obj, bsample)
+  } else {
+    stop("The fault data is neither time nor group data.")
   }
-  x <- mean(b1 - b2 + b3 - b4)
-  s <- stats::sd(b1 - b2 + b3 - b4)
+  x <- mean(bias.sample)
+  s <- stats::sd(bias.sample)
   talpha <- stats::qt(p=(1-alpha)/2, df=bsample-1, lower.tail=FALSE)
   x.interval <- x + c(-talpha, talpha)*s/sqrt(bsample)
   list(bias = x,
        bias.lower = x.interval[1],
        bias.upper = x.interval[2],
-       eic = -2 * (result$llf - x),
-       eic.lower = -2 * (result$llf -  x.interval[1]),
-       eic.upper = -2 * (result$llf -  x.interval[2]))
+       eic = -2 * (obj$llf - x),
+       eic.lower = -2 * (obj$llf -  x.interval[1]),
+       eic.upper = -2 * (obj$llf -  x.interval[2]))
 }
