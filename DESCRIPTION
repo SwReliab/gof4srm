@@ -1,7 +1,7 @@
 Package: gof4srm
 Type: Package
 Title: Goodness-of-fit tests for NHPP-based software reliability models
-Version: 0.1.0
+Version: 0.1.1
 Author: Hiroyuki OKAMURA
 Maintainer: Hiroyuki OKAMURA <okamu@hiroshima-u.ac.jp>
 Description: This is a package of goodness-of-fit tests for software reliability (growth)
@@ -11,6 +11,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 LinkingTo: Rcpp
-Imports: Rcpp 
+Imports: Rcpp, Rmpfr
 Depends: Rsrat (>= 1.5.5)
 RoxygenNote: 6.1.1
+Remotes: okamumu/Rsrat
