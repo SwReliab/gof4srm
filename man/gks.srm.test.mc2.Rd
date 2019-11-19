@@ -45,5 +45,5 @@ with Monte-Carlo testing
 \examples{
 data(dacs)
 result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-gks.test.mc(result$srm)
+gks.srm.test.mc(result$srm)
 }

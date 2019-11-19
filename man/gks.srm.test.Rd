@@ -25,5 +25,5 @@ Peform the generalized KS test for the estimated software reliability models
 \examples{
 data(dacs)
 result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-gks.test(result$srm)
+gks.srm.test(result$srm)
 }

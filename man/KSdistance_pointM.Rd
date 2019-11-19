@@ -7,9 +7,9 @@
 KSdistance_pointM(msample, cdf)
 }
 \arguments{
-\item{cdf}{A function of CDF. It is allowd to get a closure.}
+\item{msample}{A numeric matrix of IID samples from a continuous distribution (m series)}
 
-\item{sample}{A numeric matrix of IID samples from a continuous distribution (m series)}
+\item{cdf}{A function of CDF. It is allowd to get a closure.}
 }
 \value{
 A list with components;

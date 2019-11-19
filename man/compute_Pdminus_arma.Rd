@@ -11,9 +11,11 @@ compute_Pdminus_arma(ctime, count, dminus, cdf, solve)
 
 \item{count}{A sequence indicates the number of samples falls int a bin}
 
+\item{dminus}{A value of d-}
+
 \item{cdf}{A function of CDF. It is allowd to get a closure.}
 
-\item{dplus}{A value of d+}
+\item{solve}{A function to solve a linear equation.}
 }
 \value{
 A value of the probability

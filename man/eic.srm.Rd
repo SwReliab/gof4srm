@@ -4,7 +4,7 @@
 \alias{eic.srm}
 \title{EIC for SRM}
 \usage{
-eic.srm(obj, bsample = 100, alpha = 0.95)
+eic.srm(obj, bsample = 100, alpha = 0.95, initialize = FALSE)
 }
 \arguments{
 \item{obj}{An object of an estimated result by Rsrat}
@@ -13,6 +13,9 @@ eic.srm(obj, bsample = 100, alpha = 0.95)
 
 \item{alpha}{A value of significant level to obtain confidence interval.
 The default is 0.95.}
+
+\item{initialize}{A logical. If it is TRUE, the parameters are reset by initial guesses.
+The default is FALSE.}
 }
 \value{
 lower and upper bounds of bias, eic

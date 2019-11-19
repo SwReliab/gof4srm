@@ -9,5 +9,7 @@
 #' @name gof4srm
 #' @import Rsrat
 #' @importFrom Rmpfr mpfr
+#' @importFrom stats rpois runif rmultinom
+#' @importFrom lhs randomLHS
 #' @useDynLib gof4srm
 NULL

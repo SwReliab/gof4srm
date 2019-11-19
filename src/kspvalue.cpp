@@ -3,7 +3,11 @@ using namespace Rcpp;
 
 //' Compute p-value of KS.
 //'
-//' This is not in use.
+//' @param d The value of d
+//' @param n An integer to indicate the degree of freedom
+//' @param imax An integer to indicate the maximum number of terms in the series expansion
+//' @param epsi A double for tolerance error
+//' @return p-value of KS
 //'
 // [[Rcpp::export]]
 

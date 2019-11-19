@@ -39,7 +39,7 @@ List KSdistance_point(NumericVector sample, Function cdf) {
 
 //' KS distance for IID sampes drawn from a continuous distribution.
 //'
-//' @param sample A numeric matrix of IID samples from a continuous distribution (m series)
+//' @param msample A numeric matrix of IID samples from a continuous distribution (m series)
 //' @param cdf A function of CDF. It is allowd to get a closure.
 //' @return A list with components;
 //' \item{dplus}{A value of statistic D+.}
@@ -268,7 +268,7 @@ double compute_Pdplus(NumericVector ctime, IntegerVector count,
 //'
 //' @param ctime A sequence represents time slots (bins)
 //' @param size An integer for the number of total samples.
-//' @param A set of sampels drawn from the multinomial distribution.
+//' @param sample A set of sampels drawn from the multinomial distribution.
 //' @param cdf A function of CDF. It is allowd to get a closure.
 //' @return A list with components;
 //' \item{dplus}{A vector of statistic D+.}

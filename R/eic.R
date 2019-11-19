@@ -39,10 +39,12 @@ bs.srm.group <- function(srm, data) {
 #'
 #' @param obj An object of an estimated result by Rsrat
 #' @param bsample An integer of the number of bootstrap samples
+#' @param initialize A logical. If it is TRUE, the parameters are reset by initial guesses.
+#' The default is FALSE.
 #' @return A numeric vector of samples of bias
 #' @export
 
-eic.srm.group <- function(obj, bsample = 100) {
+eic.srm.group <- function(obj, bsample = 100, initialize = FALSE) {
   b3 <- obj$llf
   b1 <- numeric(bsample)
   b2 <- numeric(bsample)
@@ -54,7 +56,7 @@ eic.srm.group <- function(obj, bsample = 100) {
   for (b in 1:bsample) {
     sample <- faultdata(fault=sapply(lambda, function(r) rpois(1, lambda = r)))
     b2[b] <- obj$srm$llf(sample)
-    obj.bs <- emfit(obj$srm$clone(), sample, initialize=FALSE)
+    obj.bs <- emfit(obj$srm$clone(), sample, initialize=initialize)
     b1[b] <- obj.bs$llf
     b4[b] <- obj.bs$srm$llf(obj$srm$data)
   }
@@ -67,10 +69,12 @@ eic.srm.group <- function(obj, bsample = 100) {
 #'
 #' @param obj An object of an estimated result by Rsrat
 #' @param bsample An integer of the number of bootstrap samples
+#' @param initialize A logical. If it is TRUE, the parameters are reset by initial guesses.
+#' The default is FALSE.
 #' @return A numeric vector of samples of bias
 #' @export
 
-eic.srm.time <- function(obj, bsample = 100) {
+eic.srm.time <- function(obj, bsample = 100, initialize = FALSE) {
   b3 <- obj$llf
   b1 <- numeric(bsample)
   b2 <- numeric(bsample)
@@ -82,7 +86,7 @@ eic.srm.time <- function(obj, bsample = 100) {
   for (b in 1:bsample) {
     sample <- bs.srm.time(obj$srm, obj$srm$data, maximum)
     b2[b] <- obj$srm$llf(sample)
-    obj.bs <- emfit(obj$srm$clone(), sample, initialize=FALSE)
+    obj.bs <- emfit(obj$srm$clone(), sample, initialize=initialize)
     b1[b] <- obj.bs$llf
     b4[b] <- obj.bs$srm$llf(obj$srm$data)
   }
@@ -95,14 +99,16 @@ eic.srm.time <- function(obj, bsample = 100) {
 #'
 #' @param obj An object of an estimated result by Rsrat
 #' @param bsample An integer of the number of bootstrap samples
+#' @param initialize A logical. If it is TRUE, the parameters are reset by initial guesses.
+#' The default is FALSE.
 #' @return A vector of samples
 #' @export
 
-eic.srm.sample <- function(obj, bsample = 100) {
+eic.srm.sample <- function(obj, bsample = 100, initialize = FALSE) {
   if (check.faultdata(obj$srm$data) == "time") {
-    bias.sample <- eic.srm.time(obj, bsample)
+    bias.sample <- eic.srm.time(obj, bsample, initialize)
   } else if (check.faultdata(obj$srm$data) == "group") {
-    bias.sample <- eic.srm.group(obj, bsample)
+    bias.sample <- eic.srm.group(obj, bsample, initialize)
   } else {
     stop("The fault data is neither time nor group data.")
   }
@@ -117,14 +123,16 @@ eic.srm.sample <- function(obj, bsample = 100) {
 #' @param bsample An integer of the number of bootstrap samples
 #' @param alpha A value of significant level to obtain confidence interval.
 #' The default is 0.95.
+#' @param initialize A logical. If it is TRUE, the parameters are reset by initial guesses.
+#' The default is FALSE.
 #' @return lower and upper bounds of bias, eic
 #' @export
 
-eic.srm <- function(obj, bsample = 100, alpha = 0.95) {
+eic.srm <- function(obj, bsample = 100, alpha = 0.95, initialize = FALSE) {
   if (check.faultdata(obj$srm$data) == "time") {
-    bias.sample <- eic.srm.time(obj, bsample)
+    bias.sample <- eic.srm.time(obj, bsample, initialize)
   } else if (check.faultdata(obj$srm$data) == "group") {
-    bias.sample <- eic.srm.group(obj, bsample)
+    bias.sample <- eic.srm.group(obj, bsample, initialize)
   } else {
     stop("The fault data is neither time nor group data.")
   }

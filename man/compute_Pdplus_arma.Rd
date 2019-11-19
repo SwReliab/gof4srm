@@ -14,6 +14,8 @@ compute_Pdplus_arma(ctime, count, dplus, cdf, solve)
 \item{dplus}{A value of d+}
 
 \item{cdf}{A function of CDF. It is allowd to get a closure.}
+
+\item{solve}{A function to solve a linear equation.}
 }
 \value{
 A value of the probability

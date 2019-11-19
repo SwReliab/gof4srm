@@ -6,6 +6,18 @@
 \usage{
 ks_pvalue(d, n, imax = 100000L, epsi = 1e-12)
 }
+\arguments{
+\item{d}{The value of d}
+
+\item{n}{An integer to indicate the degree of freedom}
+
+\item{imax}{An integer to indicate the maximum number of terms in the series expansion}
+
+\item{epsi}{A double for tolerance error}
+}
+\value{
+p-value of KS
+}
 \description{
-This is not in use.
+Compute p-value of KS.
 }

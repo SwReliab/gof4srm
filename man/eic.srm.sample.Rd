@@ -4,12 +4,15 @@
 \alias{eic.srm.sample}
 \title{EIC for SRM}
 \usage{
-eic.srm.sample(obj, bsample = 100)
+eic.srm.sample(obj, bsample = 100, initialize = FALSE)
 }
 \arguments{
 \item{obj}{An object of an estimated result by Rsrat}
 
 \item{bsample}{An integer of the number of bootstrap samples}
+
+\item{initialize}{A logical. If it is TRUE, the parameters are reset by initial guesses.
+The default is FALSE.}
 }
 \value{
 A vector of samples

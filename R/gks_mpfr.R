@@ -1,8 +1,8 @@
-#' Compute P(D+>d+) for the generalized KS statistic
+#' Compute P(D->d-) for the generalized KS statistic
 #'
 #' @param ctime A sequence represents time slots (bins)
 #' @param count A sequence indicates the number of samples falls int a bin
-#' @param dplus A value of d+
+#' @param dminus A value of d-
 #' @param cdf A function of CDF. It is allowd to get a closure.
 #' @param prec An integer to indicate the precision
 #' @return A value of the probability
@@ -47,11 +47,11 @@ comp.Pdminus.mp <- function(ctime, count, dminus, cdf, prec=128) {
   as.numeric(prob)
 }
 
-#' Compute P(C->d-) for the generalized KS statistic
+#' Compute P(D+>d+) for the generalized KS statistic
 #'
 #' @param ctime A sequence represents time slots (bins)
 #' @param count A sequence indicates the number of samples falls int a bin
-#' @param dminus A value of d-
+#' @param dplus A value of d+
 #' @param cdf A function of CDF. It is allowd to get a closure.
 #' @param prec An integer to indicate the precision
 #' @return A value of the probability
@@ -114,7 +114,7 @@ comp.Pdplus.mp <- function(ctime, count, dplus, cdf, prec=128) {
 #' @examples
 #' data(dacs)
 #' result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-#' gks.test.mp(result$srm)
+#' gks.srm.test.mp(result$srm)
 #' @export
 
 gks.srm.test.mp <- function(srm, alternative = c("two.sided", "less", "greater"), prec = 128) {

@@ -16,7 +16,7 @@ KSdistance_point <- function(sample, cdf) {
 
 #' KS distance for IID sampes drawn from a continuous distribution.
 #'
-#' @param sample A numeric matrix of IID samples from a continuous distribution (m series)
+#' @param msample A numeric matrix of IID samples from a continuous distribution (m series)
 #' @param cdf A function of CDF. It is allowd to get a closure.
 #' @return A list with components;
 #' \item{dplus}{A value of statistic D+.}
@@ -83,7 +83,7 @@ compute_Pdplus <- function(ctime, count, dplus, cdf) {
 #'
 #' @param ctime A sequence represents time slots (bins)
 #' @param size An integer for the number of total samples.
-#' @param A set of sampels drawn from the multinomial distribution.
+#' @param sample A set of sampels drawn from the multinomial distribution.
 #' @param cdf A function of CDF. It is allowd to get a closure.
 #' @return A list with components;
 #' \item{dplus}{A vector of statistic D+.}
@@ -101,8 +101,9 @@ KSdistance_groupM <- function(ctime, size, sample, cdf) {
 #'
 #' @param ctime A sequence represents time slots (bins)
 #' @param count A sequence indicates the number of samples falls int a bin
-#' @param dplus A value of d+
+#' @param dminus A value of d-
 #' @param cdf A function of CDF. It is allowd to get a closure.
+#' @param solve A function to solve a linear equation.
 #' @return A value of the probability
 compute_Pdminus_arma <- function(ctime, count, dminus, cdf, solve) {
     .Call('_gof4srm_compute_Pdminus_arma', PACKAGE = 'gof4srm', ctime, count, dminus, cdf, solve)
@@ -117,6 +118,7 @@ compute_Pdminus_arma <- function(ctime, count, dminus, cdf, solve) {
 #' @param count A sequence indicates the number of samples falls int a bin
 #' @param dplus A value of d+
 #' @param cdf A function of CDF. It is allowd to get a closure.
+#' @param solve A function to solve a linear equation.
 #' @return A value of the probability
 compute_Pdplus_arma <- function(ctime, count, dplus, cdf, solve) {
     .Call('_gof4srm_compute_Pdplus_arma', PACKAGE = 'gof4srm', ctime, count, dplus, cdf, solve)
@@ -124,7 +126,11 @@ compute_Pdplus_arma <- function(ctime, count, dplus, cdf, solve) {
 
 #' Compute p-value of KS.
 #'
-#' This is not in use.
+#' @param d The value of d
+#' @param n An integer to indicate the degree of freedom
+#' @param imax An integer to indicate the maximum number of terms in the series expansion
+#' @param epsi A double for tolerance error
+#' @return p-value of KS
 #'
 ks_pvalue <- function(d, n, imax = 100000L, epsi = 1.0e-12) {
     .Call('_gof4srm_ks_pvalue', PACKAGE = 'gof4srm', d, n, imax, epsi)

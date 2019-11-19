@@ -11,9 +11,9 @@ KSdistance_groupM(ctime, size, sample, cdf)
 
 \item{size}{An integer for the number of total samples.}
 
-\item{cdf}{A function of CDF. It is allowd to get a closure.}
+\item{sample}{A set of sampels drawn from the multinomial distribution.}
 
-\item{A}{set of sampels drawn from the multinomial distribution.}
+\item{cdf}{A function of CDF. It is allowd to get a closure.}
 }
 \value{
 A list with components;

@@ -1,3 +1,7 @@
+# gof4srm 0.1.2
+
+* Modify the argument of initialize
+
 # gof4srm 0.1.1
 
 * Change DESCRIPTION to resolve dependencies.

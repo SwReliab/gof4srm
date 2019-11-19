@@ -8,8 +8,9 @@ using namespace Rcpp;
 //'
 //' @param ctime A sequence represents time slots (bins)
 //' @param count A sequence indicates the number of samples falls int a bin
-//' @param dplus A value of d+
+//' @param dminus A value of d-
 //' @param cdf A function of CDF. It is allowd to get a closure.
+//' @param solve A function to solve a linear equation.
 //' @return A value of the probability
 // [[Rcpp::export]]
 
@@ -64,6 +65,7 @@ List compute_Pdminus_arma(NumericVector ctime, IntegerVector count,
 //' @param count A sequence indicates the number of samples falls int a bin
 //' @param dplus A value of d+
 //' @param cdf A function of CDF. It is allowd to get a closure.
+//' @param solve A function to solve a linear equation.
 //' @return A value of the probability
 // [[Rcpp::export]]
 

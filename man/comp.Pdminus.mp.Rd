@@ -2,7 +2,7 @@
 % Please edit documentation in R/gks_mpfr.R
 \name{comp.Pdminus.mp}
 \alias{comp.Pdminus.mp}
-\title{Compute P(D+>d+) for the generalized KS statistic}
+\title{Compute P(D->d-) for the generalized KS statistic}
 \usage{
 comp.Pdminus.mp(ctime, count, dminus, cdf, prec = 128)
 }
@@ -11,15 +11,15 @@ comp.Pdminus.mp(ctime, count, dminus, cdf, prec = 128)
 
 \item{count}{A sequence indicates the number of samples falls int a bin}
 
+\item{dminus}{A value of d-}
+
 \item{cdf}{A function of CDF. It is allowd to get a closure.}
 
 \item{prec}{An integer to indicate the precision}
-
-\item{dplus}{A value of d+}
 }
 \value{
 A value of the probability
 }
 \description{
-Compute P(D+>d+) for the generalized KS statistic
+Compute P(D->d-) for the generalized KS statistic
 }

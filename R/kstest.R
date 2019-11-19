@@ -53,7 +53,7 @@ resample.LHC <- function(n, size, ctime, cdf) {
 #' @examples
 #' data(dacs)
 #' result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-#' gks.test(result$srm)
+#' ks.srm.test.y(result$srm)
 #' @export
 
 ks.srm.test.y <- function(srm, alternative = c("two.sided", "less", "greater")) {
@@ -90,7 +90,7 @@ ks.srm.test.y <- function(srm, alternative = c("two.sided", "less", "greater")) 
 #' @examples
 #' data(dacs)
 #' result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-#' gks.test(result$srm)
+#' gks.srm.test(result$srm)
 #' @export
 
 gks.srm.test <- function(srm, alternative = c("two.sided", "less", "greater")) {
@@ -142,7 +142,7 @@ gks.srm.test <- function(srm, alternative = c("two.sided", "less", "greater")) {
 #' @examples
 #' data(dacs)
 #' result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-#' gks.test.mc(result$srm)
+#' gks.srm.test.mc(result$srm)
 #' @export
 
 gks.srm.test.mc <- function(srm, alternative = c("two.sided", "less", "greater"),
@@ -209,7 +209,7 @@ gks.srm.test.mc <- function(srm, alternative = c("two.sided", "less", "greater")
 #' @examples
 #' data(dacs)
 #' result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-#' gks.test.mc(result$srm)
+#' gks.srm.test.mc(result$srm)
 #' @export
 
 gks.srm.test.mc2 <- function(srm, alternative = c("two.sided", "less", "greater"),
