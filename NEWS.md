@@ -1,3 +1,7 @@
+# gof4srm 0.1.3
+
+- Change the organization
+
 # gof4srm 0.1.2
 
 * Modify the argument of initialize
