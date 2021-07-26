@@ -1,0 +1,146 @@
+---
+output:
+  github_document:
+    df_print: kable
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# gof4srm
+
+gof4srm provides Kolmogorov-Smirnov test for both time and grouped data, and EIC
+(extended information criterion) for software reliability growth models.
+
+## Installation
+
+You can install gof4srm from GitHub with:
+
+```{r gh-installation, eval = FALSE}
+install.packages("devtools")
+devtools::install_github("SwReliab/gof4srm")
+```
+
+Alternatively, you can use Remote to install Rsrat from GitHub
+
+```{r gh-installation2, eval = FALSE}
+install.packages("remotes")
+remotes::install_github("SwReliab/gof4srm")
+```
+
+## Example 1
+
+This is an example of the estimation of software reliability growth models from a fault data (sys1g). 
+
+```{r example1}
+### load library
+library(gof4srm)
+
+### load example data
+data(dacs)
+
+### grouped data from DACS
+sys1g
+
+### Esimate all models
+(result <- fit.srm.nhpp(fault=sys1g, selection=NULL))
+
+### Draw the graph 
+mvfplot(fault=sys1g, srms=result)
+
+### Draw the graph (dmvf)
+dmvfplot(fault=sys1g, srms=result)
+```
+
+Perform KS test with the significance level 0.05.
+
+```{r example2}
+### KS test
+ksres <- lapply(result, ks.srm.test)
+
+### Table for P-value
+pvalue <- sapply(ksres, function(x) x$p.value)
+data.frame(p.value=pvalue, reject0.05=ifelse(pvalue < 0.05, "*", ""))
+
+### MVF for the models that are passed
+mvfplot(fault=sys1g, srms=result[pvalue >= 0.05])
+
+### MVF for the models that are passed
+dmvfplot(fault=sys1g, srms=result[pvalue >= 0.05])
+```
+
+Compute EIC
+
+```{r example3}
+### EIC
+eicres <- lapply(result, eic.srm)
+
+### Table for EIC
+eic <- sapply(eicres, function(x) x$eic)
+eic.lower <- sapply(eicres, function(x) x$eic.lower)
+eic.upper <- sapply(eicres, function(x) x$eic.upper)
+aic <- sapply(result, function(x) x$aic)
+data.frame(aic=aic, eic=eic, eic.lower=eic.lower, eic.upper=eic.upper, ks.p.value=pvalue)
+```
+
+## Example 2 (Phase-Type SRGM)
+
+This is an example of the estimation of software reliability growth models from a fault data (sys1g). 
+
+```{r gh-installation3, eval = FALSE}
+### Install Rphsrm
+install.packages("remotes")
+remotes::install_github("SwReliab/Rphsrm")
+```
+
+```{r example4}
+### load library
+library(Rphsrm)
+
+### Esimate several phases
+(result <- fit.srm.cph(fault=sys1g, phase=c(10,20,30,40,50), selection=NULL))
+
+### Draw the graph 
+mvfplot(fault=sys1g, srms=result)
+
+### Draw the graph (dmvf)
+dmvfplot(fault=sys1g, srms=result)
+```
+
+Perform KS test with the significance level 0.05.
+
+```{r example5}
+### KS test
+ksres <- lapply(result, ks.srm.test)
+
+### Table for P-value
+pvalue <- sapply(ksres, function(x) x$p.value)
+data.frame(p.value=pvalue, reject0.05=ifelse(pvalue < 0.05, "*", ""))
+
+### MVF for the models that are passed
+mvfplot(fault=sys1g, srms=result[pvalue >= 0.05])
+
+### MVF for the models that are passed
+dmvfplot(fault=sys1g, srms=result[pvalue >= 0.05])
+```
+
+Compute EIC
+
+```{r example6}
+### EIC
+eicres <- lapply(result, eic.srm)
+
+### Table for EIC
+eic <- sapply(eicres, function(x) x$eic)
+eic.lower <- sapply(eicres, function(x) x$eic.lower)
+eic.upper <- sapply(eicres, function(x) x$eic.upper)
+aic <- sapply(result, function(x) x$aic)
+data.frame(aic=aic, eic=eic, eic.lower=eic.lower, eic.upper=eic.upper, ks.p.value=pvalue)
+```
