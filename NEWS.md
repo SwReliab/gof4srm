@@ -1,3 +1,7 @@
+# gof4srm 0.2.0
+
+- Add ks.srm.test
+
 # gof4srm 0.1.3
 
 - Change the organization

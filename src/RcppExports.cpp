@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // KSdistance_point
 List KSdistance_point(NumericVector sample, Function cdf);
 RcppExport SEXP _gof4srm_KSdistance_point(SEXP sampleSEXP, SEXP cdfSEXP) {

@@ -2,12 +2,12 @@
 % Please edit documentation in R/kstest.R
 \name{gks.srm.test}
 \alias{gks.srm.test}
-\title{Generalized KS test for software reliability models}
+\title{Generalized KS test for software reliability models with group data}
 \usage{
-gks.srm.test(srm, alternative = c("two.sided", "less", "greater"))
+gks.srm.test(obj, alternative = c("two.sided", "less", "greater"))
 }
 \arguments{
-\item{srm}{An object for the estimated software reliability model by Rsrat}
+\item{obj}{An object of an estimated result by Rsrat}
 
 \item{alternative}{A string indicates the alternative hypothesis and
 must be one of "two.sided" (default), "less", or "greater".}
@@ -20,10 +20,5 @@ A list with components;
 \item{alternative}{A string of the alternative hypothesis.}
 }
 \description{
-Peform the generalized KS test for the estimated software reliability models
-}
-\examples{
-data(dacs)
-result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-gks.srm.test(result$srm)
+Perform the generalized KS test for the estimated software reliability models
 }
