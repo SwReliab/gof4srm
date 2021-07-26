@@ -5,11 +5,18 @@
 \title{Generalized KS test for software reliability models with Monte-Carlo testing
 under unknown model parameters}
 \usage{
-gks.srm.test.mc2(srm, alternative = c("two.sided", "less", "greater"),
-  b = NA, alpha = 0.01, cv = 0.1, lhc = FALSE, seed = NA)
+gks.srm.test.mc2(
+  obj,
+  alternative = c("two.sided", "less", "greater"),
+  b = NA,
+  alpha = 0.01,
+  cv = 0.1,
+  lhc = FALSE,
+  seed = NA
+)
 }
 \arguments{
-\item{srm}{An object for the estimated software reliability model by Rsrat}
+\item{obj}{An object of an estimated result by Rsrat}
 
 \item{alternative}{A string indicates the alternative hypothesis and
 must be one of "two.sided" (default), "less", or "greater".}
@@ -39,11 +46,11 @@ A list with components;
 \item{seed}{An integer for the seed of random numbers.}
 }
 \description{
-Peform the generalized KS test for the estimated software reliability models
+Perform the generalized KS test for the estimated software reliability models
 with Monte-Carlo testing
 }
 \examples{
 data(dacs)
 result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-gks.srm.test.mc(result$srm)
+gks.srm.test.mc2(result)
 }

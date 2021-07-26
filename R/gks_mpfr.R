@@ -102,7 +102,7 @@ comp.Pdplus.mp <- function(ctime, count, dplus, cdf, prec=128) {
 #'
 #' Peform the generalized KS test for the estimated software reliability models
 #'
-#' @param srm An object for the estimated software reliability model by Rsrat
+#' @param obj An object of an estimated result by Rsrat
 #' @param alternative A string indicates the alternative hypothesis and
 #' must be one of "two.sided" (default), "less", or "greater".
 #' @param prec An integer to indicate the precision
@@ -114,14 +114,14 @@ comp.Pdplus.mp <- function(ctime, count, dplus, cdf, prec=128) {
 #' @examples
 #' data(dacs)
 #' result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-#' gks.srm.test.mp(result$srm)
+#' gks.srm.test.mp(result)
 #' @export
 
-gks.srm.test.mp <- function(srm, alternative = c("two.sided", "less", "greater"), prec = 128) {
+gks.srm.test.mp <- function(obj, alternative = c("two.sided", "less", "greater"), prec = 128) {
   alternative <- match.arg(alternative)
-  tcdf <- trunc.cdf(srm)
-  ctime <- cumsum(srm$data$time)
-  fault <- srm$data$fault
+  tcdf <- trunc.cdf(obj$srm)
+  ctime <- cumsum(obj$srm$data$time)
+  fault <- obj$srm$data$fault
   size <- sum(fault)
 
   ks0 <- KSdistance_group(ctime=ctime, count=fault, tcdf)

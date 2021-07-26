@@ -4,11 +4,14 @@
 \alias{gks.srm.test.mp}
 \title{Generalized KS test for software reliability models}
 \usage{
-gks.srm.test.mp(srm, alternative = c("two.sided", "less", "greater"),
-  prec = 128)
+gks.srm.test.mp(
+  obj,
+  alternative = c("two.sided", "less", "greater"),
+  prec = 128
+)
 }
 \arguments{
-\item{srm}{An object for the estimated software reliability model by Rsrat}
+\item{obj}{An object of an estimated result by Rsrat}
 
 \item{alternative}{A string indicates the alternative hypothesis and
 must be one of "two.sided" (default), "less", or "greater".}
@@ -28,5 +31,5 @@ Peform the generalized KS test for the estimated software reliability models
 \examples{
 data(dacs)
 result <- fit.srm.nhpp(fault=sys1g[1:30], srm.name=c("exp"))
-gks.srm.test.mp(result$srm)
+gks.srm.test.mp(result)
 }
