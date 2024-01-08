@@ -8,6 +8,9 @@
 #' @docType package
 #' @name gof4srm
 #' @import Rsrat
+#' @import foreach
+#' @import parallel
+#' @import doParallel
 #' @importFrom Rmpfr mpfr
 #' @importFrom stats rpois runif rmultinom
 #' @importFrom lhs randomLHS

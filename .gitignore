@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+gof4srm.Rcheck/
+gof4srm*.tar.gz
+gof4srm*.tgz

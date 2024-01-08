@@ -53,13 +53,40 @@ eic.srm.group <- function(obj, bsample = 100, initialize = FALSE) {
   ctime <- c(0, cumsum(obj$srm$data$time))
   lambda <- diff(obj$srm$mvf(ctime))
 
-  for (b in 1:bsample) {
-    sample <- faultdata(fault=sapply(lambda, function(r) rpois(1, lambda = r)))
-    b2[b] <- obj$srm$llf(sample)
-    obj.bs <- emfit(obj$srm$clone(), sample, initialize=initialize)
-    b1[b] <- obj.bs$llf
-    b4[b] <- obj.bs$srm$llf(obj$srm$data)
+  bdata <- lapply(1:bsample, function(i) faultdata(fault=sapply(lambda, function(r) rpois(1, lambda = r))))
+  results <- foreach(d=bdata, .inorder=FALSE) %do% {
+    emfit(obj$srm$clone(), d, initialize=initialize)
   }
+  b1 <- sapply(results, function(x) x$llf)
+  b2 <- sapply(bdata, function(d) obj$srm$llf(d))
+  b3 <- rep(obj$llf, bsample)
+  b4 <- sapply(results, function(x) x$srm$llf(obj$srm$data))
+
+  b1 - b2 + b3 - b4
+}
+
+eic.srm.group.parallel <- function(obj, bsample = 100, initialize = FALSE) {
+  b3 <- obj$llf
+  b1 <- numeric(bsample)
+  b2 <- numeric(bsample)
+  b4 <- numeric(bsample)
+
+  ctime <- c(0, cumsum(obj$srm$data$time))
+  lambda <- diff(obj$srm$mvf(ctime))
+
+  options(mc.cores = detectCores(logical = FALSE))
+  cluster <- makeCluster(getOption("mc.cores", 2L), type = "FORK")
+  registerDoParallel(cluster)
+  bdata <- lapply(1:bsample, function(i) faultdata(fault=sapply(lambda, function(r) rpois(1, lambda = r))))
+  results <- foreach(d=bdata, .inorder=FALSE) %dopar% {
+    emfit(obj$srm$clone(), d, initialize=initialize)
+  }
+  b1 <- sapply(results, function(x) x$llf)
+  b2 <- sapply(bdata, function(d) obj$srm$llf(d))
+  b3 <- rep(obj$llf, bsample)
+  b4 <- sapply(results, function(x) x$srm$llf(obj$srm$data))
+  stopCluster(cluster)
+
   b1 - b2 + b3 - b4
 }
 
@@ -83,13 +110,40 @@ eic.srm.time <- function(obj, bsample = 100, initialize = FALSE) {
   cte <- sum(obj$data$time) + obj$srm$data$max
   maximum <- stats::optimize(obj$srm$intensity, c(0,cte), maximum=TRUE)$objective
 
-  for (b in 1:bsample) {
-    sample <- bs.srm.time(obj$srm, obj$srm$data, maximum)
-    b2[b] <- obj$srm$llf(sample)
-    obj.bs <- emfit(obj$srm$clone(), sample, initialize=initialize)
-    b1[b] <- obj.bs$llf
-    b4[b] <- obj.bs$srm$llf(obj$srm$data)
+  bdata <- lapply(1:bsample, function(i) bs.srm.time(obj$srm, obj$srm$data, maximum))
+  results <- foreach(d=bdata, .inorder=FALSE) %do% {
+    emfit(obj$srm$clone(), d, initialize=initialize)
   }
+  b1 <- sapply(results, function(x) x$llf)
+  b2 <- sapply(bdata, function(d) obj$srm$llf(d))
+  b3 <- rep(obj$llf, bsample)
+  b4 <- sapply(results, function(x) x$srm$llf(obj$srm$data))
+
+  b1 - b2 + b3 - b4
+}
+
+eic.srm.time.parallel <- function(obj, bsample = 100, initialize = FALSE) {
+  b3 <- obj$llf
+  b1 <- numeric(bsample)
+  b2 <- numeric(bsample)
+  b4 <- numeric(bsample)
+
+  cte <- sum(obj$data$time) + obj$srm$data$max
+  maximum <- stats::optimize(obj$srm$intensity, c(0,cte), maximum=TRUE)$objective
+
+  options(mc.cores = detectCores(logical = FALSE))
+  cluster <- makeCluster(getOption("mc.cores", 2L), type = "FORK")
+  registerDoParallel(cluster)
+  bdata <- lapply(1:bsample, function(i) bs.srm.time(obj$srm, obj$srm$data, maximum))
+  results <- foreach(d=bdata, .inorder=FALSE) %dopar% {
+    emfit(obj$srm$clone(), d, initialize=initialize)
+  }
+  b1 <- sapply(results, function(x) x$llf)
+  b2 <- sapply(bdata, function(d) obj$srm$llf(d))
+  b3 <- rep(obj$llf, bsample)
+  b4 <- sapply(results, function(x) x$srm$llf(obj$srm$data))
+  stopCluster(cluster)
+
   b1 - b2 + b3 - b4
 }
 
